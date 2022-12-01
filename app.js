@@ -6,77 +6,76 @@ function App() {
         items = _React$useState2[0],
         setItems = _React$useState2[1];
 
-    var _React$useState3 = React.useState("comments"),
+    var _React$useState3 = React.useState([]),
         _React$useState4 = _slicedToArray(_React$useState3, 2),
-        tipus = _React$useState4[0],
-        setTipus = _React$useState4[1];
+        items2 = _React$useState4[0],
+        setItems2 = _React$useState4[1];
 
     React.useEffect(function () {
-        fetch("https://jsonplaceholder.typicode.com/" + tipus).then(function (res) {
+        fetch("https://jsonplaceholder.typicode.com/comments").then(function (res) {
             return res.ok ? res.json() : [];
         }).then(function (tartalom) {
             setItems(tartalom);
         });
-    }, [tipus]);
+    }, [items]);
 
-    return React.createElement(
-        "div",
-        { className: "contgainer" },
-        React.createElement(
-            "div",
-            { className: "row m-5 border p-5" },
-            React.createElement(FormKomponens, { seteTipus: setTipus }),
-            React.createElement(ListaKomponens, { elemek: items })
-        )
-    );
+    React.useEffect(function () {
+        fetch("https://jsonplaceholder.typicode.com/posts").then(function (res) {
+            return res.ok ? res.json() : [];
+        }).then(function (tartalom) {
+            setItems2(tartalom);
+        });
+    }, [items2]);
+
+    return React.createElement(ListaKomponens, { elemek: items, elemek2: items2 });
 }
 
-var FormKomponens = function FormKomponens(_ref) {
-    var setTipus = _ref.setTipus;
+var ListaKomponens = function ListaKomponens(_ref) {
+    var elemek = _ref.elemek,
+        elemek2 = _ref.elemek2;
     return React.createElement(
-        "form",
-        {
-            className: "w-100",
-            onSubmit: function onSubmit(event) {
-                event.preventDefault();setTipus(event.target.elements.contentType.value);
-            } },
+        "div",
+        null,
         React.createElement(
-            "select",
-            {
-                name: "contentType",
-                className: "form-control mb-2" },
+            "div",
+            { className: "row w5 p5", style: { width: "50%", float: "left" } },
             React.createElement(
-                "option",
-                { value: "comments" },
-                "Kommentek"
+                "h1",
+                { style: { display: "flex", justifyContent: "center", alignContent: "center" } },
+                "Comments"
             ),
             React.createElement(
-                "option",
-                { value: "posts" },
-                "Postok"
+                "ul",
+                null,
+                elemek.map(function (elem) {
+                    return React.createElement(
+                        "li",
+                        { key: elem.id, className: "list-group-item" },
+                        elem.body
+                    );
+                })
             )
         ),
         React.createElement(
-            "button",
-            {
-                className: "btn btn-primary mb-2", type: "submit" },
-            "Kiv\xE1laszt"
+            "div",
+            { className: "row w5 p5", style: { width: "50%", float: "left" } },
+            React.createElement(
+                "h1",
+                { style: { display: "flex", justifyContent: "center", alignContent: "center" } },
+                "Posts"
+            ),
+            React.createElement(
+                "ul",
+                null,
+                elemek2.map(function (elem) {
+                    return React.createElement(
+                        "li",
+                        { key: elem.id, className: "list-group-item" },
+                        elem.body
+                    );
+                })
+            )
         )
-    );
-};
-
-var ListaKomponens = function ListaKomponens(_ref2) {
-    var elemek = _ref2.elemek;
-    return React.createElement(
-        "ul",
-        null,
-        elemek.map(function (elem) {
-            return React.createElement(
-                "li",
-                { key: elem.id, className: "list-group-item" },
-                elem.body
-            );
-        })
     );
 };
 
